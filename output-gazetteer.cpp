@@ -128,7 +128,7 @@ void place_tag_processor::process_tags(osmium::OSMObject const &o)
         } else if (strcmp(k, "landuse") == 0) {
             if (strcmp(v, "cemetry") == 0)
                 places.emplace_back(k, v);
-            else
+            else if (strcmp(v, "residential") == 0)
                 landuse = &item;
         } else if (strcmp(k, "highway") == 0) {
             if (strcmp(v, "footway") == 0) {
@@ -316,9 +316,11 @@ void place_tag_processor::process_tags(osmium::OSMObject const &o)
     if (isnamed && places.empty()) {
         if (junction)
             places.emplace_back(junction->key(), junction->value());
-        else if (landuse)
-            places.emplace_back(landuse->key(), landuse->value());
+        /*else if (landuse)
+            places.emplace_back(landuse->key(), landuse->value());*/
     }
+    if (landuse)
+        places.emplace_back(landuse->key(), landuse->value());
 
     if (places.empty()) {
         bool postcode = address.find("postcode") != address.end();
